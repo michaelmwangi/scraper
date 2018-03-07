@@ -1,5 +1,5 @@
 Language used: python 2.7
-Command to run the code: python main.py 
+Command to run the code: python main.py <allowloops> <numberofloops>
 Command to run the tests: python scraper_test.py
 
 Notes:

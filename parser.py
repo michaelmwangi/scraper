@@ -17,7 +17,7 @@ class Parser:
         initialize the parser 
         """
         if html:
-            if isinstance(html, str):
+            if not isinstance(html, str):
                 raise ScrapingException("Cannot initialize parser! expected html content to be a string")
             self._html_txt = html
             self._html_tree = etree.parse(StringIO.StringIO(self._html_txt), parser=self.parser)

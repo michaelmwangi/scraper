@@ -10,7 +10,7 @@ def load_test_file():
     fname = "sample.html"
     f = open(fname, 'r')
     html_cont = f.read()
-    return html_cont.decode('utf-8')
+    return html_cont.encode('utf-8')
 
 class TestParser(unittest.TestCase):
 
@@ -55,6 +55,26 @@ class TestScraper(unittest.TestCase):
         
     def _fetch_page(self, url):
         return load_test_file()
+
+    def _max_loops_reached_test(self):
+
+        self.scraper.visited_pages['testpage'] = 2
+        # by default max loops allowed is 1
+        self.assertTrue(self.scraper._max_loops_reached('testpage'))
+        self.assertFalse(self.scraper._max_loops_reached('testpage2'))
+
+        del self.scraper.visited_pages['testpage']
+        del self.scraper.visited_pages['testpage2']
+
+    def test_max_loops(self):
+        tmp_out = StringIO.StringIO()
+        old_out = sys.stdout
+        sys.stdout = tmp_out
+        self.scraper.max_loops = 0
+        self.scraper.scrap()
+        sys.stdout = old_out
+        output = tmp_out.getvalue().strip()
+        self.assertIn('Cannot proceed with scrapping, maximum loops', output)
 
     def test_scrap(self):
         tmp_out = StringIO.StringIO()
